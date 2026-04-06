@@ -157,7 +157,6 @@ The Power BI Dashboard is designed to be highly interactive. If you download the
 
 ## <a id="dashboard-preview"></a>📸 Dashboard Preview
 
-*(Note: Replace these paths with the actual relative paths of the images in your dashboards folder after pushing to GitHub)*
 
 **Main View (Cybersecurity Dark Mode)**
 ![Main View](dashboards/dashboard_vista_principal.png)
