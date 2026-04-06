@@ -62,7 +62,7 @@ By querying the database with a forensic mindset, this pipeline uncovered critic
 
 * **The 50/50 Fraud Split:** While traditional literature flags wire transfers as the highest risk, the BI dashboard visually proved that the *actual volume* of successful attacks is split exactly 50/50 between `TRANSFER` and `CASH_OUT` operations.
 * **Money Mule Networks Exposed:** Using SQL Self-Joins, the pipeline successfully traced the "Transfer & Cash Out" pattern, identifying the exact bridge accounts (Money Mules) that receive stolen funds and withdraw them at ATMs within the same operational hour.
-* **Temporal Attack Windows:** By transforming transaction timestamps into a 24-hour cycle, the dashboard revealed aggressive spikes in criminal activity, identifying the exact hours where capital hemorrhage exceeds $150M. This allows banks to tighten rule-based alerts specifically during these vulnerable windows.
+* **Coordinated Burst Attacks (744-Hour Timeline):** Tracking the transactions over a continuous 744-hour (31-day) simulation revealed that fraud does not follow typical human day/night cycles; it occurs relentlessly 24/7. The dashboard exposed severe, coordinated "burst attacks" at specific intervals (e.g., around step 400), where the capital hemorrhage spiked to nearly **$150 Million** in a single hour. This proves the institution is facing automated bot scripts and organized criminal syndicates, necessitating real-time machine learning firewalls rather than manual reviews.
 
 ---
 
