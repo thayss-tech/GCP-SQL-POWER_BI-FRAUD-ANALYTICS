@@ -49,6 +49,8 @@ While predictive machine learning focuses on stopping future fraud, **forensic d
 
 This project establishes a Cloud Data Analytics pipeline to dissect a highly imbalanced financial dataset (where frauds represent < 1% of transactions). Using **Google BigQuery**, raw logs are transformed into actionable intelligence through Advanced SQL. This curated data is then consumed by **Power BI** to deliver a dynamic, interactive dashboard designed for Anti-Money Laundering (AML) and Cybersecurity teams.
 
+🔗 **Complementary Analysis:** This project is directly connected to my second repository featuring an [End-to-End Predictive ML Pipeline](https://github.com/thayss-tech). **Both projects utilize the exact same dataset**, but their analyses are strictly complementary. While this repository focuses on macro-level forensic tracking and Business Intelligence, the ML project tackles real-time, micro-level transaction screening. The Exploratory Data Analysis (EDA) conducted with Python in the other repository strongly validates the SQL findings presented here.
+
 > 📥 **Dataset Access for Reproduction:** Due to its massive size, the raw `.csv` is not hosted directly in this repository. If you want to clone this project and reproduce the SQL scripts, **[download the original dataset from Kaggle here](https://www.kaggle.com/datasets/amanalisiddiqui/fraud-detection-dataset?resource=download)** and upload it to your GCP BigQuery instance.
 
 > 🤖 **Looking for the Predictive ML Model?**
@@ -60,7 +62,7 @@ This project establishes a Cloud Data Analytics pipeline to dissect a highly imb
 
 By querying the database with a forensic mindset, this pipeline uncovered critical blind spots in standard fraud-detection rules:
 
-* **The 50/50 Fraud Split:** While traditional literature flags wire transfers as the highest risk, the BI dashboard visually proved that the *actual volume* of successful attacks is split exactly 50/50 between `TRANSFER` and `CASH_OUT` operations.
+* **The 50/50 Fraud Split:** While traditional literature flags wire transfers as the highest risk, the BI dashboard visually proved that the *actual volume* of successful attacks is split exactly 50/50 between `TRANSFER` and `CASH_OUT` operations. *(Note: In our companion ML project, the Python-based EDA also found this exact same result, which is why the predictive Scikit-Learn pipeline was strategically filtered to only evaluate these two high-risk categories).*
 * **Money Mule Networks Exposed:** Using SQL Self-Joins, the pipeline successfully traced the "Transfer & Cash Out" pattern, identifying the exact bridge accounts (Money Mules) that receive stolen funds and withdraw them at ATMs within the same operational hour.
 * **Coordinated Burst Attacks (744-Hour Timeline):** Tracking the transactions over a continuous 744-hour (31-day) simulation revealed that fraud does not follow typical human day/night cycles; it occurs relentlessly 24/7. The dashboard exposed severe, coordinated "burst attacks" at specific intervals (e.g., around step 400), where the capital hemorrhage spiked to nearly **$150 Million** in a single hour. This proves the institution is facing automated bot scripts and organized criminal syndicates, necessitating real-time machine learning firewalls rather than manual reviews.
 * **The "Step" Variable Dichotomy (ML vs. BI):** In my predictive Machine Learning pipeline (hosted in a separate repository), the `step` (time) variable was deliberately dropped during Feature Engineering. Because fraud occurs relentlessly 24/7, keeping it would introduce noise and risk model overfitting. However, in this **Forensic BI pipeline**, `step` is actively utilized. By stepping back and aggregating the data chronologically, we shift from individual predictions to macro-level analysis, successfully visualizing the massive "burst attack" anomalies that the ML model is ultimately designed to block.
@@ -95,7 +97,7 @@ graph TD
 
 To extract signal from the noise of millions of legitimate transactions, the pipeline employs specific forensic techniques:
 
-* **Account Draining Detection:** Using CTEs, the SQL script isolates accounts where the transfer amount represents >98% of the original balance, a strong indicator of an account takeover.
+* **Account Draining Detection:** Using CTEs, the SQL script isolates accounts where the transfer amount represents >98% of the original balance, a strong indicator of an account takeover. *(As discovered during the Python EDA in our companion ML project, relying on simple human-coded rules like 'balance drops to zero' accidentally flags over 1.2 million legitimate users. This advanced BI tracking provides the necessary macro-context to support the ML's multivariate approach).*
 * **The Self-Join Tracking:** To detect laundering, the script joins the transaction table onto itself (`t1.dest_account = t2.origin_account`), effectively tracking the flow of money from a victim's account to a mule, and finally to physical cash.
 * **DAX Dynamics:** In Power BI, explicit DAX measures were created to accurately format and calculate monetary losses dynamically based on user-selected cross-filters.
 
@@ -114,13 +116,6 @@ To extract signal from the noise of millions of legitimate transactions, the pip
 > * **What this means:** The template preserves all my DAX measures, the relational data model, and the UI/UX design, but is completely stripped of the millions of rows of raw data.  
 > * **Data Access:** Because the original file connects via DirectQuery/Import to a private, authenticated Google BigQuery environment, external users will not be able to refresh the data. However, recruiters and technical reviewers can still open the `.pbit` file in Power BI Desktop to inspect the underlying DAX code, the architectural structure, and the visual configuration.  
 > * **Reconstruction:** If you wish to rebuild the pipeline locally, download the [raw dataset from Kaggle](https://www.kaggle.com/datasets/amanalisiddiqui/fraud-detection-dataset?resource=download), run the provided SQL scripts, and reconnect the data source.
-
-
-
-
-
-
-
 
 ---
 
